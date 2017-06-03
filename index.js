@@ -1,5 +1,6 @@
 import React, { Component }  from 'react';
-import { View, NativeModules, DeviceEventEmitter, Slider, requireNativeComponent, Image, Platform, Dimensions, Text } from 'react-native';
+import { View, NativeModules, DeviceEventEmitter, Slider, requireNativeComponent, TouchableOpacity, Image, Platform, Dimensions, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const ReactNativeVolumeController = NativeModules.ReactNativeVolumeController;
 
@@ -20,23 +21,50 @@ export default class SliderVolumeController extends Component {
       ReactNativeVolumeController.update();
     }
 
+    onVolumeUp() {
+        var value = this.state.volume_value + 0.1;
+        if (value > 1) {
+            this.setState({volume_value: 1})
+        } else {
+            this.setState({volume_value: value})
+        }
+        
+        ReactNativeVolumeController.change(value);
+    }
+    onVolumeDown() {
+        var value = this.state.volume_value - 0.1;
+        if (value < 0) {
+            this.setState({volume_value: 0})
+        } else {
+            this.setState({volume_value: value})
+        }
+        
+        ReactNativeVolumeController.change(value);
+    }
     render() {
+
         const dimension = Dimensions.get("window")
-        const viewWidth = dimension.width-20;
+        const viewWidth = dimension.width-70;
         let sliderWidth = viewWidth;
         let buttonWidth = sliderWidth*0.15
         let soundRouteButton = null;
-        if( Platform.OS === 'ios'){
-            sliderWidth = viewWidth*0.85
-            soundRouteButton = <SoundRouteButton style={{width:buttonWidth, top:3}} />
+        
+        let downName = 'md-volume-down';
+        if (this.state.volume_value == 0) {
+            alert('xx');
+            downName = "md-volume-mute";
         }
 
         return(<View style={[this.props.style, {marginLeft:10, marginRight:10,flex:1, flexDirection:"row", width:viewWidth,
               alignItems:'center',
               justifyContent:'center'}]}>
-              <Slider {...this.props} style={[{width:sliderWidth}]} value={this.state.volume_value} onValueChange={(value)=>ReactNativeVolumeController.change(value)}/>
-              {soundRouteButton}
-
+              <TouchableOpacity onPress={() => this.onVolumeDown()}>
+                  <Icon name={downName} size={30} color="#900" style={{margin: 5}} />
+              </TouchableOpacity>
+              <Slider {...this.props} style={[{width:sliderWidth}]} value={this.state.volume_value} onValueChange={(value)=>console.log(value)}/>
+              <TouchableOpacity onPress={() => this.onVolumeUp()}>
+              <Icon name="md-volume-up" size={30} color="#900" style={{margin: 5}} />
+              </TouchableOpacity>
           </View>
         );
     }
