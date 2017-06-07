@@ -52,14 +52,16 @@ export default class SliderVolumeController extends Component {
     }
 
     return (
-      <View style={[this.props.style, { marginLeft: 10, marginRight: 10, flex: 1, flexDirection: 'row', width: viewWidth, alignItems: 'center', justifyContent: 'center' }]}>
-        <TouchableOpacity onPress={() => this.onVolumeDown()}>
-          <Icon name={downName} size={30} color="#900" style={{ margin: 5 }} />
-        </TouchableOpacity>
-        <Slider {...this.props} style={[{ width: sliderWidth }]} value={this.state.volume_value} onValueChange={value => console.log(value)} />
-        <TouchableOpacity onPress={() => this.onVolumeUp()}>
-          <Icon name="md-volume-up" size={30} color="#900" style={{ margin: 5 }} />
-        </TouchableOpacity>
+      <View style={[this.props.style, { marginLeft: 10, marginRight: 10, width: viewWidth, alignItems: 'center', justifyContent: 'center' }]}>
+        <View style={{width: viewWidth, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <TouchableOpacity onPress={() => this.onVolumeDown()}>
+                <Icon name={downName} size={20} color="white" style={{ margin: 5 }} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onVolumeUp()}>
+                <Icon name="md-volume-up" size={20} color="white" style={{ margin: 5 }} />
+            </TouchableOpacity>
+        </View>
+        <Slider {...this.props} style={[{ width: sliderWidth, height: 20, marginTop: -10 }]} value={this.state.volume_value} onValueChange={value => console.log(value)} />
       </View>
     );
   }
